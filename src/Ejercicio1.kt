@@ -1,5 +1,5 @@
-class Ejercicio1 {
-    fun nain()
+
+    fun main(){
     println("¿Cual es tu nombre?")
     // Esperamos entrada por parte del usuario
     val nombre = readLine() ?: "Visitante"
@@ -10,12 +10,13 @@ class Ejercicio1 {
 
     // Creación de una función anonima
     val saludo = when {
-        horaActual > 18 -> "Buenas tardes"
-        horaActual > 12 -> "Buenos días"
+        horaActual < 18 -> "Buenas tardes"
+        horaActual < 12 -> "Buenos días"
         else -> "Buenas noches"
        }
     // Devolver resultados al ususario
     println("$saludo, $nombre")
 
+
+
     }
-}
