@@ -2,7 +2,7 @@ import java.io.File
 import kotlin.math.roundToInt
 import kotlin.math.abs
 
-// 1. Estructura de Datos y Texto de Prueba
+// Estructura de Datos y Texto de Prueba
 
 data class EstadisticasTexto(
     val totalCaracteres: Int,
