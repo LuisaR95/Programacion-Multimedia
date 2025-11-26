@@ -9,18 +9,23 @@ data class Contacto(
 )
 
 // Definición excepciones
-
+// sealed class: permite agrupar tipos de excepciones relacionados.
+//Se crea una excepción específica cuando no existe un contacto con un ID dado.
 sealed class ContactoException(msg: String) : Exception(msg) {
     class ContactoNoEncontradoException(id: String) :
         ContactoException("No se encontró un contacto con ID $id")
 }
 
 // Creación de listas
+// listaContactos: almacena todos los contactos creados.
+//siguienteId: aumenta cada vez que se crea un nuevo contacto.
 val listaContactos = mutableListOf<Contacto>()
 var siguienteId = 1
 
 
 // Validación mail
+// Comprueba que el email contenga @ y ..
+//Devuelve un Result.success(email) si es válido, o un Result.failure() si no.
 
 fun validarEmail1(email: String): Result<String> {
     return if (email.contains("@") && email.contains(".")) {
@@ -32,7 +37,9 @@ fun validarEmail1(email: String): Result<String> {
 }
 
 // Vaidación telefono
-
+// Usa una expresión regular para verificar que sean exactamente 9 dígitos.
+//Si cumple → success().
+//Si falla → failure().
 fun validarTelefono(telefono: String): Result<String> {
     val regex = Regex("^\\d{9}$")
     return if (telefono.matches(regex)) Result.success(telefono)
@@ -40,12 +47,17 @@ fun validarTelefono(telefono: String): Result<String> {
 }
 
 //Validación nombre
-
+//El nombre debe tener mínimo 3 letras.
 fun validarNombre1(nombre: String): Result<String> =
     if (nombre.length < 3) Result.failure(Exception("El nombre debe tener al menos 3 caracteres"))
     else Result.success(nombre)
 
 //Creación contacto
+// Si algo falla → retorna error inmediatamente.
+//Si todo está bien:
+//Crea un contacto con ID autoincremental.
+//Lo añade a la lista.
+//Devuelve un Result.success(contacto).
 
 fun crearContacto(nombre: String, telefono: String, email: String): Result<Contacto> {
     validarNombre(nombre).onFailure { return Result.failure(it) }
@@ -58,23 +70,25 @@ fun crearContacto(nombre: String, telefono: String, email: String): Result<Conta
 }
 
 // Buscar por nombre
-
+// Si el nombre está vacío → devuelve todos.
+//Si no → devuelve coincidencias sin distinguir may/min.
 fun buscarPorNombre(nombre: String): List<Contacto> =
     if (nombre.isBlank()) listaContactos
     else listaContactos.filter { it.nombre.contains(nombre, ignoreCase = true) }
 
 // Obtener favoritos
-
+//Devuelve solo los contactos marcados como favoritos.
 fun obtenerFavoritos(): List<Contacto> =
     listaContactos.filter { it.favorito }
 
 // Obtener orddenados
-
+//Ordena por nombre A–Z.
 fun obtenerOrdenados(): List<Contacto> =
     listaContactos.sortedBy { it.nombre }
 
-// toggle de favoritos
-
+// Busca el contacto por ID.
+//Si no existe → devuelve error.
+//Si existe → cambia favorito a lo contrario.
 fun toggleFavorito(id: Int): Result<Unit> {
     val contacto = listaContactos.find { it.id == id }
         ?: return Result.failure(ContactoException.ContactoNoEncontradoException(id.toString()))
@@ -82,7 +96,9 @@ fun toggleFavorito(id: Int): Result<Unit> {
     contacto.favorito = !contacto.favorito
     return Result.success(Unit)
 }
-
+// Valida los nuevos datos.
+//Busca el contacto.
+//Si existe, modifica sus campos.
 fun editarContacto(id: Int, nombre: String, telefono: String, email: String): Result<Contacto> {
     validarNombre(nombre).onFailure { return Result.failure(it) }
     validarTelefono(telefono).onFailure { return Result.failure(it) }
@@ -99,7 +115,9 @@ fun editarContacto(id: Int, nombre: String, telefono: String, email: String): Re
 }
 
 //Eliminar contacto
-
+//removeIf elimina en base a condición.
+//Si elimina → éxito.
+//Si no encontró el ID → error.
 fun eliminarContacto(id: Int): Result<Unit> {
     val eliminado = listaContactos.removeIf { it.id == id }
     return if (eliminado) Result.success(Unit)
@@ -108,7 +126,6 @@ fun eliminarContacto(id: Int): Result<Unit> {
 
 
 // Mostrar contactos
-
 fun mostrarContacto(c: Contacto) {
     val fav = if (c.favorito) "⭐" else ""
     println("[$fav ID: ${c.id}] ${c.nombre} | Tel: ${c.telefono} | Email: ${c.email}")
@@ -116,7 +133,6 @@ fun mostrarContacto(c: Contacto) {
 
 
 // Menu interactivo
-
 fun menuInteractivo1() {
     var continuar = true
 
