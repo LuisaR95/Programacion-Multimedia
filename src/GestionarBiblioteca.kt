@@ -14,18 +14,22 @@ val biblioteca = listOf(
 // Funciones de Búsqueda y Filtrado
 
 // Implementa buscarLibrosPorAutor()
+// Busca todos los libros cuyo autor coincida total o parcialmente
+//con la palabra que escribe el usuario.
 fun buscarLibrosPorAutor(autor: String, libros: List<Libro>): Result<List<Libro>> {
     if (autor.isBlank()) {
         return Result.failure(Exception("El nombre del autor no puede estar vacío."))
     }
 
-    // Filtra la lista y convierte a minúsculas para una búsqueda insensible a mayúsculas
+    // Filtra la lista y convierte a minúsculas para una búsqueda insensible a mayúsculas.
+    // Si el usuario deja el campo vacío → devuelve un error (Result.failure).
+    //Filtra los libros donde autor contenga el texto buscado:
     val librosEncontrados = libros.filter { it.autor.contains(autor, ignoreCase = true) }
 
     return if (librosEncontrados.isNotEmpty()) {
-        Result.success(librosEncontrados)
+        Result.success(librosEncontrados) //Si encuentra resultados
     } else {
-        Result.failure(Exception("No se encontraron libros del autor '$autor'."))
+        Result.failure(Exception("No se encontraron libros del autor '$autor'."))  //Si no encuentra → error con mensaje.
     }
 }
 
@@ -46,6 +50,7 @@ fun buscarLibrosPorRangoAño(inicio: Int, fin: Int, libros: List<Libro>): Result
 }
 
 // Implementa librosDisponibles
+// Devuelve solo los libros cuyo estado es "Disponible"
 fun librosDisponibles(libros: List<Libro>): Result<List<Libro>> {
     // Filtra los libros que tienen el estado "Disponible"
     val disponibles = libros.filter { it.estado == "Disponible" }
@@ -57,18 +62,18 @@ fun librosDisponibles(libros: List<Libro>): Result<List<Libro>> {
     }
 }
 
-// mplementa calcularEstadisticas()
+// Implementa calcularEstadisticas()
 fun calcularEstadisticas(libros: List<Libro>): Result<String> {
     if (libros.isEmpty()) {
         return Result.failure(Exception("La lista de libros está vacía."))
     }
 
     // Agrupa los libros por autor y calcula el conteo de libros de cada autor
-    val conteoPorAutor = libros.groupBy { it.autor }
-        .mapValues { (_, lista) -> lista.size }
+    val conteoPorAutor = libros.groupBy { it.autor } //Agrupa por autor
+        .mapValues { (_, lista) -> lista.size } //Cuenta libros por autor
 
     // Encuentra el autor con más libros, manejando nulos con maxByOrNull() y ?.
-    val autorMasProductivo = conteoPorAutor.maxByOrNull { it.value }?.key ?: "N/A"
+    val autorMasProductivo = conteoPorAutor.maxByOrNull { it.value }?.key ?: "N/A" //Encuentra el autor con más libros
 
     val mensajeEstadisticas = """
         --- Estadísticas de la Biblioteca ---
@@ -80,10 +85,10 @@ fun calcularEstadisticas(libros: List<Libro>): Result<String> {
     return Result.success(mensajeEstadisticas)
 }
 
-// Funciones Extra
+
 
 // Agregar búsqueda por título
-fun buscarLibrosPorTitulo(titulo: String, libros: List<Libro>): Result<List<Libro>> {
+fun buscarLibrosPorTitulo(titulo: String, libros: List<Libro>): Result<List<Libro>> { //Busca libros cuyo título contenga una palabra clave.
     if (titulo.isBlank()) {
         return Result.failure(Exception("El título no puede estar vacío."))
     }
@@ -98,6 +103,8 @@ fun buscarLibrosPorTitulo(titulo: String, libros: List<Libro>): Result<List<Libr
 }
 
 //Mostrar libros ordenados por año
+// ascendente = true → del más viejo al más nuevo
+//ascendente = false → del más nuevo al más viejo
 fun ordenarLibrosPorAño(libros: List<Libro>, ascendente: Boolean = true): List<Libro> {
     return if (ascendente) {
         libros.sortedBy { it.año }
@@ -109,7 +116,7 @@ fun ordenarLibrosPorAño(libros: List<Libro>, ascendente: Boolean = true): List<
 
 
 // Función para manejar la impresión de resultados
-fun <T> manejarResultado(titulo: String, resultado: Result<T>) {
+fun <T> manejarResultado(titulo: String, resultado: Result<T>) { // Imprime de forma ordenada cualquier resultado obtenido con Result.
     println("\n=== $titulo ===")
     if (resultado.isFailure) {
         println("ERROR: ${resultado.exceptionOrNull()?.message}")

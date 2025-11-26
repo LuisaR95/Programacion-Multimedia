@@ -20,12 +20,11 @@ su adopción. Kotlin es el lenguaje preferido para
 el desarrollo de aplicaciones Android.
 """
 
-// 2. Funciones de Transformación y Análisis
+// Funciones de Transformación y Análisis
 
 // Normaliza el texto: minúsculas y remueve puntuación
 fun normalizarTexto(texto: String): String {
-    // CORRECCIÓN: Usamos 'lowercase()' en lugar de 'toLowerCase()' (deprecated)
-    // Reemplaza puntuación (cualquier cosa que no sea \w o \s) por un espacio
+    //reemplaza cualquier cosa que NO sea letra/dígito/espacio
     val sinPuntuacion = texto.lowercase().replace(Regex("[^\\w\\s]"), " ")
 
     // Reemplaza múltiples espacios por uno solo
@@ -37,7 +36,7 @@ fun contarCaracteres(textoNormalizado: String): Int {
     return textoNormalizado.replace(" ", "").length
 }
 
-// Obtiene la lista limpia de palabras
+// Obtiene la lista limpia de palabras. Divide el texto por espacios y devuelve una lista:
 fun obtenerListaPalabras(textoNormalizado: String): List<String> {
     return textoNormalizado
         .split(' ') // Divide por espacios
@@ -45,6 +44,9 @@ fun obtenerListaPalabras(textoNormalizado: String): List<String> {
 }
 
 // Encuentra la palabra más frecuente usando groupBy y maxByOrNull
+// groupBy { it } → agrupa palabras iguales
+//mapValues { it.value.size } → cuenta cuántas veces aparece cada una
+//maxByOrNull { it.value } → busca la más repetida
 fun encontrarPalabraMasFrecuente(palabras: List<String>): String {
     val frecuencia = palabras.groupBy { it }
         .mapValues { it.value.size }
@@ -54,7 +56,7 @@ fun encontrarPalabraMasFrecuente(palabras: List<String>): String {
     return masFrecuente?.key ?: "N/A"
 }
 
-// Calcula la longitud promedio de las palabras
+// Toma cada palabra, obtiene su longitud y calcula un promedio.
 fun longitudPromedioPalabras(palabras: List<String>): Double {
     if (palabras.isEmpty()) return 0.0
 
@@ -63,7 +65,8 @@ fun longitudPromedioPalabras(palabras: List<String>): Double {
         .average() // Promedio
 }
 
-// Combina todas las funcionalidades para generar las estadísticas
+// Permite buscar palabras con expresiones regulares.
+
 fun analizarTexto(texto: String): EstadisticasTexto {
     val textoNormalizado = normalizarTexto(texto)
     val palabras = obtenerListaPalabras(textoNormalizado)
@@ -78,13 +81,16 @@ fun analizarTexto(texto: String): EstadisticasTexto {
     )
 }
 
-// EXTRA: Busca palabras con un patrón usando Expresiones Regulares
+// Busca palabras con un patrón usando Expresiones Regulares
 fun buscarPalabrasConPatron(palabras: List<String>, patronRegex: String): List<String> {
     val regex = Regex(patronRegex)
     return palabras.filter { it.matches(regex) }
 }
 
-// EXTRA: Exportar análisis a archivo
+// Exportar análisis a archivo
+// trimIndent() — Formatear texto multilínea
+//joinToString() — Convertir una colección en texto
+
 fun exportarAnalisis(stats: EstadisticasTexto) {
     val fileName = "analisis_texto.txt"
     val fileContent = """
@@ -105,7 +111,7 @@ fun exportarAnalisis(stats: EstadisticasTexto) {
     }
 }
 
-// 3. Función Principal (main)
+// Función Principal (main)
 fun main() {
     println("**Iniciando Análisis de Texto**")
     val estadisticas = analizarTexto(TEXTO_EJEMPLO)

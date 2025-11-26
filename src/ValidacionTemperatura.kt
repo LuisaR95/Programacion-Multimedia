@@ -28,14 +28,14 @@ fun celsiusAFahrenheit(celsius: Double): Double {
 
 
  //Implementa kelvinACelsius()
-
+//Si una temperatura en °C es menor que -273.15, retorna un error envuelto en Result.
 fun kelvinACelsius(kelvin: Double): Double {
 
     return kelvin - 273.15
 }
 
 
- //Extra: Conversión inversa Fahrenheit a Celsius
+ //Conversión inversa Fahrenheit a Celsius
 
 fun fahrenheitACelsius(fahrenheit: Double): Double {
 
@@ -55,7 +55,12 @@ fun validarTemperatura(celsius: Double): Result<Double> {
 }
 
 // Implementa convertir()
-
+//Esta es la función más compleja, y hace TODO:
+//Convertir el valor a número (toDoubleOrNull)
+//Detectar errores de entrada
+//Validar contra el cero absoluto
+//Convertir según el menú elegido
+//Devolver Result.success o Result.failure
 
 fun convertir(valor: String, opcion: Int): Result<Temperatura> {
     // Manejar toDoubleOrNull() y errores comunes
@@ -93,7 +98,7 @@ fun convertir(valor: String, opcion: Int): Result<Temperatura> {
             return Result.success(Temperatura(celsius, "°C"))
         }
 
-        3 -> { // Fahrenheit -> Celsius (Extra)
+        3 -> { // Fahrenheit -> Celsius
             val celsiusEquivalente = fahrenheitACelsius(tempInicial)
 
             validarTemperatura(celsiusEquivalente)
