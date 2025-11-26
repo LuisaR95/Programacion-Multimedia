@@ -1,7 +1,7 @@
 import kotlin.math.pow
 import kotlin.math.abs // Importamos abs para la función de tendencias
 
-// 1. Estructura de Datos para el Historial
+// Estructura de Datos para el Historial
 data class RegistroIMC(
     val peso: Double, // Peso en kg
     val altura: Double, // Altura en metros
@@ -9,11 +9,11 @@ data class RegistroIMC(
     val clasificacion: String
 )
 
-// 2. Funciones Auxiliares de Clasificación y Cálculo
+// Funciones Auxiliares de Clasificación y Cálculo
 
 // Función para clasificar el IMC según las categorías de la OMS
 fun clasificarIMC(imc: Double): String {
-    // Requisito: when con rangos
+    // when con rangos
     return when {
         imc < 18.5 -> "Bajo peso 😔"
         imc < 25.0 -> "Peso normal 💪" // 18.5 - 24.9
@@ -23,25 +23,27 @@ fun clasificarIMC(imc: Double): String {
 }
 
 // Función principal de cálculo
+//Usa el método pow(2) para elevar la altura al cuadrado.
 fun calcularIMC(peso: Double, altura: Double): Double {
     // Requisito: peso / (altura²)
     return peso / altura.pow(2)
 }
 
-// 3. Lógica Principal y Menú
+// Lógica Principal y Menú
 fun main() {
     println("**Calculadora de IMC con Historial** ")
 
-
+    //Aquí se guardan todos los cálculos.
     val historial = mutableListOf<RegistroIMC>()
 
     // Función auxiliar para leer y validar un valor de Double
+    //Lee un número y valida que sea positivo y numérico.
     fun leerValor(prompt: String): Double? {
         print(prompt)
         val entrada = readLine()
         val valor = entrada?.toDoubleOrNull()
 
-        // Requisito: Validar entrada (peso y altura positivos)
+        //Validar entrada (peso y altura positivos)
         if (valor == null || valor <= 0) {
             println("Error: Por favor, introduce un valor numérico positivo.")
             return null
@@ -49,7 +51,7 @@ fun main() {
         return valor
     }
 
-    // 3. Función para mostrar tendencias (ganancia/pérdida de peso)
+    // Función para mostrar tendencias (ganancia/pérdida de peso)
     // Definida aquí para acceder a 'historial'
     fun mostrarTendencias() {
         if (historial.size < 2) {
@@ -57,7 +59,7 @@ fun main() {
             return
         }
 
-        // Requisito: historial.last() y Diferencia entre valores
+        // historial.last() y Diferencia entre valores
         val ultimo = historial.last()
         val penultimo = historial[historial.size - 2] // Accede al penúltimo
 
@@ -75,7 +77,7 @@ fun main() {
         println("-------------------------------------------------------")
     }
 
-    // 1. Función para ingresar un nuevo cálculo
+    //  Función para ingresar un nuevo cálculo
     fun nuevoCalculo() {
         println("\n--- Nuevo Cálculo de IMC ---")
         val peso = leerValor("Introduce tu peso en kg: ") ?: return
@@ -96,7 +98,7 @@ fun main() {
         mostrarTendencias()
     }
 
-    // 2. Función para mostrar todo el historial
+    // Función para mostrar todo el historial
     fun mostrarHistorial() {
         if (historial.isEmpty()) {
             println("\n El historial de cálculos está vacío.")

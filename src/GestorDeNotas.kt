@@ -2,7 +2,9 @@ import java.io.File
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-// Requisito: Data class para Nota con Timestamps de creación
+// File → permite leer/escribir archivos.
+//LocalDateTime → para guardar la fecha/hora de creación de una nota.
+//DateTimeFormatter → da formato legible a las fechas.
 data class Nota(
     val id: Int,
     var titulo: String,
@@ -11,9 +13,13 @@ data class Nota(
     var esImportante: Boolean = false
 )
 
-// Requisito: StringBuilder para iterar y construir el texto de exportación
+// StringBuilder para iterar y construir el texto de exportación
 fun main() {
     // Variables de estado
+    //notas: lista donde se guardan todas las notas.
+    //nextId: ID autoincremental para cada nueva nota.
+    //exportFileName: archivo donde se exportarán las notas.
+    //formatter: formato legible de fecha.
     val notas = mutableListOf<Nota>()
     var nextId = 1
     val exportFileName = "notas_exportadas.txt"
@@ -26,7 +32,11 @@ fun main() {
 
     // --- Funciones de Gestión ---
 
-    // 1. Crear nota con título y contenido
+    // Crear nota con título y contenido
+    //Pide título y contenido al usuario.
+    //Verifica que no estén vacíos.
+    //Crea una nueva Nota con ID autoincremental.
+    //La agrega a la lista.
     fun crearNota() {
         println("\n--- Crear Nueva Nota ---")
         print("Título: ")
@@ -35,7 +45,7 @@ fun main() {
         val contenido = readLine().orEmpty()
 
         if (titulo.isBlank() || contenido.isBlank()) {
-            println("❌ El título y el contenido no pueden estar vacíos.")
+            println("El título y el contenido no pueden estar vacíos.")
             return
         }
 
@@ -44,7 +54,7 @@ fun main() {
         println("✅ Nota ID ${nuevaNota.id} creada con éxito.")
     }
 
-    // 2. Mostrar notas por fecha de creación
+    // Mostrar notas por fecha de creación
     fun mostrarNotas() {
         if (notas.isEmpty()) {
             println("\n🚫 No hay notas para mostrar.")
@@ -63,13 +73,17 @@ fun main() {
         println("----------------------------------------")
     }
 
-    // 3. Buscar por título o contenido (Requisito: filter y map)
+    // Buscar por título o contenido (Requisito: filter y map)
+    //Pide un término.
+    //Convierte todo a minúsculas.
+    //Filtra si aparece en título o contenido.
+    //Muestra los resultados formateados (usando map para convertir objetos en texto).
     fun buscarNotas() {
         print("\nIntroduce el término de búsqueda (título o contenido): ")
         val termino = readLine().orEmpty().lowercase()
 
         if (termino.isBlank()) {
-            println("❌ El término de búsqueda no puede estar vacío.")
+            println("El término de búsqueda no puede estar vacío.")
             return
         }
 
@@ -79,7 +93,7 @@ fun main() {
         }
 
         if (resultados.isEmpty()) {
-            println("🚫 No se encontraron notas que contengan '$termino'.")
+            println("No se encontraron notas que contengan '$termino'.")
             return
         }
 
@@ -92,7 +106,7 @@ fun main() {
         println("----------------------------------------")
     }
 
-    // 4. Modificar nota
+    // Modificar nota
     fun modificarNota() {
         print("\nIntroduce el ID de la nota a modificar: ")
         val id = readLine()?.toIntOrNull() ?: return
@@ -100,7 +114,7 @@ fun main() {
         val nota = obtenerNotaPorId(id)
 
         if (nota == null) {
-            println("🚫 Nota con ID $id no encontrada.")
+            println("Nota con ID $id no encontrada.")
             return
         }
 
@@ -121,7 +135,9 @@ fun main() {
         println("✅ Nota ID ${nota.id} modificada con éxito.")
     }
 
-    // 5. Marcar/Desmarcar como importante
+    // Marcar/Desmarcar como importante
+    //Alterna entre verdadero/falso.
+    //Muestra mensaje de confirmación
     fun marcarImportante() {
         print("\nIntroduce el ID de la nota para cambiar su estado de importancia: ")
         val id = readLine()?.toIntOrNull() ?: return
@@ -129,7 +145,7 @@ fun main() {
         val nota = obtenerNotaPorId(id)
 
         if (nota == null) {
-            println("🚫 Nota con ID $id no encontrada.")
+            println("Nota con ID $id no encontrada.")
             return
         }
 
@@ -138,7 +154,9 @@ fun main() {
         println("✅ Nota ID ${nota.id} $estado.")
     }
 
-    // 6. Eliminar nota
+    // Eliminar nota
+    //Alterna entre verdadero/falso.
+    //Muestra mensaje de confirmación
     fun eliminarNota() {
         print("\nIntroduce el ID de la nota a ELIMINAR: ")
         val id = readLine()?.toIntOrNull() ?: return
@@ -146,20 +164,20 @@ fun main() {
         val eliminada = notas.removeIf { it.id == id }
 
         if (eliminada) {
-            println("🗑️ Nota ID $id eliminada con éxito.")
+            println("Nota ID $id eliminada con éxito.")
         } else {
-            println("🚫 Nota con ID $id no encontrada.")
+            println("Nota con ID $id no encontrada.")
         }
     }
 
-    // 7. Exportar notas a formato texto (Requisito: writeText)
+    // Exportar notas a formato texto (Requisito: writeText)
     fun exportarNotas() {
         if (notas.isEmpty()) {
-            println("\n🚫 No hay notas para exportar.")
+            println("\nNo hay notas para exportar.")
             return
         }
 
-        // Requisito: StringBuilder para iterar y construir el texto
+        //StringBuilder para iterar y construir el texto
         val contenidoExportacion = StringBuilder()
 
         contenidoExportacion.append("--- EXPORTACIÓN DE NOTAS (${LocalDateTime.now().format(formatter)}) ---\n\n")

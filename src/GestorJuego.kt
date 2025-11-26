@@ -1,8 +1,8 @@
 fun main() {
-    println("🎉 **Juego de Adivinanza de Números** 🎉")
+    println(" **Juego de Adivinanza de Números** 🎉")
     println("----------------------------------------")
 
-    // 1. Generar número aleatorio entre 1 y 100
+    // Generar número aleatorio entre 1 y 100
     val numeroSecreto = (1..100).random()
 
     // Variables de estado
@@ -10,6 +10,7 @@ fun main() {
     var mejorRecord = Int.MAX_VALUE // Usado para inicializar el récord (máximo posible)
     var jugarDeNuevo = true
 
+    //Cada ronda empieza sin intentos y marcando que el número aún no ha sido adivinado.
     while (jugarDeNuevo) {
         println("\nHe generado un número secreto entre 1 y 100 ¡Intenta adivinarlo!")
         intentosActuales = 0
@@ -26,6 +27,11 @@ fun main() {
                 continue
             }
 
+            // El programa verifica:
+            //Que la entrada no es nula
+            //Que el jugador introdujo un número
+            //Que está en el rango válido (1 a 100)
+            //Si no cumple, pide nuevamente la suposición.
             val suposicion = entrada.toIntOrNull()
 
             if (suposicion == null || suposicion < 1 || suposicion > 100) {
@@ -49,7 +55,7 @@ fun main() {
                 // Actualizar y mostrar récord
                 if (intentosActuales < mejorRecord) {
                     mejorRecord = intentosActuales
-                    println("🏆 ¡NUEVO RÉCORD PERSONAL! **$mejorRecord** intentos.")
+                    println("¡NUEVO RÉCORD PERSONAL! **$mejorRecord** intentos.")
                 } else if (mejorRecord != Int.MAX_VALUE) {
                     println("El mejor récord hasta ahora es: **$mejorRecord** intentos.")
                 }
